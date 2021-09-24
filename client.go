@@ -1,4 +1,4 @@
-package nicehash_client
+package nhclient
 
 import "github.com/go-resty/resty/v2"
 

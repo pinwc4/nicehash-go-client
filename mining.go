@@ -1,4 +1,4 @@
-package nicehash_client
+package nhclient
 
 type mining struct {}
 
