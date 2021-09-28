@@ -1,40 +1,59 @@
 package nhclient
 
-type mining struct {}
+import (
+	"github.com/go-resty/resty/v2"
+)
+
+type mining struct {
+	httpClient *resty.Client
+}
 
 //GetAddress get the mining address.
-func (m *mining) GetAddress() {
-	//TODO: Implement method
+func (m *mining) GetAddress() (string, error) {
+	type response struct {
+		Address string
+	}
+
+	resp, err := m.httpClient.R().
+		SetResult(&response{}).
+		Get("https://api2.nicehash.com/main/api/v2/mining/miningAddress")
+
+	if err != nil {
+		return "", err
+	}
+
+	r := resp.Result().(*response)
+	return r.Address, nil
 }
 
 //GetAlgos list mining algos with basic statistics for organization (and for rig id if specified).
-func (m *mining) GetAlgos(rigId *string)  {
+func (m *mining) GetAlgos(rigId *string) {
 	//TODO: Implement method
 }
 
 //GetRigsGroups list groups with list of rigs in the groups.
 //When extendedResponse is set to true, response contains number of total and active devices for each rig and group.
-func (m *mining) GetRigsGroups()  {
+func (m *mining) GetRigsGroups() {
 	//TODO: Implement method
 }
 
 //GetRigStats get statistical streams for selected rig.
-func (m *mining) GetRigStats()  {
+func (m *mining) GetRigStats() {
 	//TODO: Implement method
 }
 
 //GetRigStatisticsByAlgo get statistical streams for selected rig and selected algorithm.
-func (m *mining) GetRigStatisticsByAlgo(algo string)  {
+func (m *mining) GetRigStatisticsByAlgo(algo string) {
 	//TODO: Implement method
 }
 
 //GetRigDetails get mining rig detailed information for selected rig.
-func (m *mining) GetRigDetails(rigId string)  {
+func (m *mining) GetRigDetails(rigId string) {
 	//TODO: Implement method
 }
 
 //GetActiveWorkers get a list of active worker.
-func (m *mining) GetActiveWorkers()  {
+func (m *mining) GetActiveWorkers() {
 	//TODO: Implement method
 }
 
@@ -60,5 +79,3 @@ func (m *mining) GetAllRigsStatisticsByAlgo(algo string) {
 func (m *mining) GetAllRigs(algo string) {
 	//TODO: Implement method
 }
-
-
