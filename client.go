@@ -17,6 +17,7 @@ type client struct {
 	httpClient *resty.Client
 	Mining     *mining
 	Public     *public
+	Accounting *accounting
 }
 
 func New() *client {
@@ -36,6 +37,9 @@ func New() *client {
 			httpClient: httpClient,
 		},
 		Public: &public{
+			httpClient: httpClient,
+		},
+		Accounting: &accounting{
 			httpClient: httpClient,
 		},
 	}
