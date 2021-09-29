@@ -15,5 +15,5 @@ func TestClient(t *testing.T) {
 
 	rig, err := client.Mining.GetRigDetails("0-sDiZZc7S-Eq7jgtZ47qN3A")
 
-	fmt.Println(rig.Devices[1].GetCoreTemperature(), rig.Devices[1].GetMemoryTemperature(), err)
+	fmt.Println(rig.Devices, err)
 }

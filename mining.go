@@ -1,6 +1,7 @@
 package nhclient
 
 import (
+	"errors"
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	"github.com/shopspring/decimal"
@@ -96,8 +97,14 @@ func (m *mining) GetRigDetails(rigId string) (*rig, error) {
 		SetResult(&rig{}).
 		Get(fmt.Sprintf("%s/main/api/v2/mining/rig2/%s", BaseURL, rigId))
 
+	//TODO: Improve error handling
 	if err != nil {
 		return nil, err
+	}
+
+	//TODO: Improve status check
+	//if resp.StatusCode() != 200 {
+		return nil, errors.New("unauthorized")
 	}
 
 	return resp.Result().(*rig), nil
