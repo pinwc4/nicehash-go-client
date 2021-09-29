@@ -1,8 +1,51 @@
 package nhclient
 
 import (
+	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/shopspring/decimal"
+	"math"
 )
+
+const BaseURL = "https://api2.nicehash.com"
+
+type device struct {
+	ID          string
+	Name        string
+	Temperature float64
+	Load        float64
+}
+
+func (d *device) GetMemoryTemperature() float64 {
+	return d.Temperature / 65536
+}
+
+func (d *device) GetCoreTemperature() float64 {
+	return math.Mod(d.Temperature, 65536)
+}
+
+type stats struct {
+}
+
+type rig struct {
+	Id                 string `json:"rigId"`
+	RigType            string `json:"type"` //TODO: Enum
+	Name               string
+	StatusTime         int64
+	JoinTime           int64
+	MinerStatus        string //TODO: Enum
+	GroupName          string
+	UnpaidAmount       decimal.Decimal
+	Notifications      []string //TODO: Enum
+	SoftwareVersions   string
+	Devices            []*device
+	CPUMiningEnabled   bool
+	CPUExists          bool
+	Stats              []*stats
+	Profitability      decimal.Decimal
+	LocalProfitability decimal.Decimal
+	RigPowerMode       string //TODO: Enum
+}
 
 type mining struct {
 	httpClient *resty.Client
@@ -16,7 +59,7 @@ func (m *mining) GetAddress() (string, error) {
 
 	resp, err := m.httpClient.R().
 		SetResult(&response{}).
-		Get("https://api2.nicehash.com/main/api/v2/mining/miningAddress")
+		Get(BaseURL + "/main/api/v2/mining/miningAddress")
 
 	if err != nil {
 		return "", err
@@ -48,8 +91,16 @@ func (m *mining) GetRigStatisticsByAlgo(algo string) {
 }
 
 //GetRigDetails get mining rig detailed information for selected rig.
-func (m *mining) GetRigDetails(rigId string) {
-	//TODO: Implement method
+func (m *mining) GetRigDetails(rigId string) (*rig, error) {
+	resp, err := m.httpClient.R().
+		SetResult(&rig{}).
+		Get(fmt.Sprintf("%s/main/api/v2/mining/rig2/%s", BaseURL, rigId))
+
+	if err != nil {
+		return nil, err
+	}
+
+	return resp.Result().(*rig), nil
 }
 
 //GetActiveWorkers get a list of active worker.
