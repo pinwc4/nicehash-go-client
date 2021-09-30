@@ -1,9 +1,9 @@
 package nhclient
 
 import (
-	"errors"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
 	"math"
 )
@@ -11,10 +11,32 @@ import (
 const BaseURL = "https://api2.nicehash.com"
 
 type device struct {
-	ID          string
-	Name        string
-	Temperature float64
-	Load        float64
+	ID         string
+	Name       string
+	DeviceType *struct {
+		EnumName    string //Todo: enum
+		Description string
+	}
+	Temperature                    float64
+	Load                           float64
+	RevolutionsPerMinute           float64
+	RevolutionsPerMinutePercentage float64
+	PowerMode                      *struct {
+		EnumName    string //Todo: Enum
+		Description string
+	}
+	PowerUsage float64
+	Speeds     []*struct {
+		Algorithm     string //Todo: Enum
+		Title         string
+		Speed         float64
+		DisplaySuffix string
+	}
+	Intensity *struct {
+		EnumName    string //Todo: Enum
+		Description string
+	}
+	NHQM string
 }
 
 func (d *device) GetMemoryTemperature() float64 {
@@ -26,6 +48,25 @@ func (d *device) GetCoreTemperature() float64 {
 }
 
 type stats struct {
+	StatsTime int64
+	Market    string //TODO: Enum
+	Algorithm *struct {
+		EnumName    string //TODO: Enum
+		Description string
+	}
+	UnpaidAmount             decimal.Decimal
+	Difficulty               float64
+	ProxyID                  int64
+	TimeConnected            int64
+	XNSub                    bool
+	SpeedAccepted            float64
+	SpeedRejectedR1Target    float64
+	SpeedRejectedR2Stale     float64
+	SpeedRejectedR3Duplicate float64
+	SpeedRejectedR4NTime     float64
+	SpeedRejectedR5Other     float64
+	SpeedRejectedTotal       float64
+	Profitability            float64
 }
 
 type rig struct {
@@ -97,17 +138,20 @@ func (m *mining) GetRigDetails(rigId string) (*rig, error) {
 		SetResult(&rig{}).
 		Get(fmt.Sprintf("%s/main/api/v2/mining/rig2/%s", BaseURL, rigId))
 
-	//TODO: Improve error handling
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unexpected error")
 	}
 
-	//TODO: Improve status check
-	//if resp.StatusCode() != 200 {
-		return nil, errors.New("unauthorized")
+	if requestErr, ok := resp.Error().(*requestError); ok {
+		return nil, errors.New(requestErr.Errors[0].Message)
 	}
 
-	return resp.Result().(*rig), nil
+	rig, ok := resp.Result().(*rig)
+	if !ok {
+		return nil, errors.New("invalid result")
+	}
+
+	return rig, nil
 }
 
 //GetActiveWorkers get a list of active worker.

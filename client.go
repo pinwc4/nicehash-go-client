@@ -21,15 +21,17 @@ type client struct {
 }
 
 func New() *client {
-	httpClient := resty.New().OnBeforeRequest(func(c *resty.Client, request *resty.Request) error {
-		request.SetHeaders(map[string]string{
-			"X-Time":       strconv.FormatInt(time.Now().UnixMilli(), 10),
-			"X-Nonce":      uuid.NewString(),
-			"X-Request-Id": uuid.NewString(),
-		})
+	httpClient := resty.New().
+		OnBeforeRequest(func(c *resty.Client, request *resty.Request) error {
+			request.SetHeaders(map[string]string{
+				"X-Time":       strconv.FormatInt(time.Now().UnixMilli(), 10),
+				"X-Nonce":      uuid.NewString(),
+				"X-Request-Id": uuid.NewString(),
+			})
 
-		return nil
-	})
+			return nil
+		}).
+		SetError(&requestError{})
 
 	return &client{
 		httpClient: httpClient,

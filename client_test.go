@@ -1,6 +1,7 @@
 package nhclient
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"testing"
@@ -15,5 +16,12 @@ func TestClient(t *testing.T) {
 
 	rig, err := client.Mining.GetRigDetails("0-sDiZZc7S-Eq7jgtZ47qN3A")
 
-	fmt.Println(rig.Devices, err)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	s, _ := json.Marshal(rig)
+
+	fmt.Println(string(s))
 }
