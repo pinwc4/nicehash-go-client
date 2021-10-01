@@ -2,13 +2,17 @@ package nhclient
 
 import (
 	"fmt"
-	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
 	"math"
 )
 
-const BaseURL = "https://api2.nicehash.com"
+const ProdUrl = "https://api2.nicehash.com"
+const TestUrl = "https://api-test.nicehash.com"
+
+type mining struct{}
+
+var Mining mining
 
 type device struct {
 	ID         string
@@ -29,7 +33,7 @@ type device struct {
 	Speeds     []*struct {
 		Algorithm     string //Todo: Enum
 		Title         string
-		Speed         float64
+		Speed         string //TODO: Check float
 		DisplaySuffix string
 	}
 	Intensity *struct {
@@ -89,19 +93,15 @@ type rig struct {
 	RigPowerMode       string //TODO: Enum
 }
 
-type mining struct {
-	httpClient *resty.Client
-}
-
 //GetAddress get the mining address.
 func (m *mining) GetAddress() (string, error) {
 	type response struct {
 		Address string
 	}
 
-	resp, err := m.httpClient.R().
+	resp, err := httpClient.R().
 		SetResult(&response{}).
-		Get(BaseURL + "/main/api/v2/mining/miningAddress")
+		Get(ProdUrl + "/main/api/v2/mining/miningAddress")
 
 	if err != nil {
 		return "", err
@@ -134,9 +134,9 @@ func (m *mining) GetRigStatisticsByAlgo(algo string) {
 
 //GetRigDetails get mining rig detailed information for selected rig.
 func (m *mining) GetRigDetails(rigId string) (*rig, error) {
-	resp, err := m.httpClient.R().
+	resp, err := httpClient.R().
 		SetResult(&rig{}).
-		Get(fmt.Sprintf("%s/main/api/v2/mining/rig2/%s", BaseURL, rigId))
+		Get(fmt.Sprintf("%s/main/api/v2/mining/rig2/%s", ProdUrl, rigId))
 
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected error")

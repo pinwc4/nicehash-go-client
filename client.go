@@ -7,48 +7,14 @@ import (
 	"time"
 )
 
-type Credentials struct {
-	orgId     string
-	apiKey    string
-	apiSecret string
-}
+var httpClient = resty.New().
+	OnBeforeRequest(func(c *resty.Client, request *resty.Request) error {
+		request.SetHeaders(map[string]string{
+			"X-Time":       strconv.FormatInt(time.Now().UnixMilli(), 10),
+			"X-Nonce":      uuid.NewString(),
+			"X-Request-Id": uuid.NewString(),
+		})
 
-type client struct {
-	httpClient *resty.Client
-	Mining     *mining
-	Public     *public
-	Accounting *accounting
-}
-
-func New() *client {
-	httpClient := resty.New().
-		OnBeforeRequest(func(c *resty.Client, request *resty.Request) error {
-			request.SetHeaders(map[string]string{
-				"X-Time":       strconv.FormatInt(time.Now().UnixMilli(), 10),
-				"X-Nonce":      uuid.NewString(),
-				"X-Request-Id": uuid.NewString(),
-			})
-
-			return nil
-		}).
-		SetError(&requestError{})
-
-	return &client{
-		httpClient: httpClient,
-		Mining: &mining{
-			httpClient: httpClient,
-		},
-		Public: &public{
-			httpClient: httpClient,
-		},
-		Accounting: &accounting{
-			httpClient: httpClient,
-		},
-	}
-}
-
-func (c *client) Authenticate(credentials *Credentials) *client {
-	c.httpClient.OnBeforeRequest(authenticatorMiddleware(credentials))
-
-	return c
-}
+		return nil
+	}).
+	SetError(&requestError{})
