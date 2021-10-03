@@ -1,4 +1,4 @@
-package nhclient
+package middlewares
 
 import (
 	"crypto/hmac"
@@ -9,14 +9,15 @@ import (
 	"net/url"
 )
 
+//TODO: Move Credentials to another package
 type Credentials struct {
 	OrgId     string
 	ApiKey    string
 	ApiSecret string
 }
 
-func Authenticate(credentials *Credentials) {
-	httpClient.OnBeforeRequest(func(client *resty.Client, request *resty.Request) error {
+func NewAuthenticator(credentials *Credentials) resty.RequestMiddleware {
+	return func(client *resty.Client, request *resty.Request) error {
 		separator := string([]byte{0x00})
 
 		requestUrl, err := url.Parse(request.URL)
@@ -54,5 +55,5 @@ func Authenticate(credentials *Credentials) {
 		})
 
 		return nil
-	})
+	}
 }

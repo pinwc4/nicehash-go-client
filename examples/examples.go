@@ -1,19 +1,9 @@
 package main
 
-import (
-	"fmt"
-	"github.com/GutoScherer/nicehash-client"
-	"os"
-)
+import "github.com/GutoScherer/nicehash-client"
 
 func main() {
-	nhclient.Authenticate(&nhclient.Credentials{
-		OrgId:     os.Getenv("ORG_ID"),
-		ApiKey:    os.Getenv("API_KEY"),
-		ApiSecret: os.Getenv("API_SECRET"),
-	})
+	client := nhclient.New()
 
-	address, err := nhclient.Mining.GetAddress()
-
-	fmt.Println(address, err)
+	client.Public.General.GetMiningAlgorithms()
 }

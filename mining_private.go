@@ -1,18 +1,13 @@
 package nhclient
 
 import (
-	"fmt"
-	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
 	"math"
 )
 
-const ProdUrl = "https://api2.nicehash.com"
-const TestUrl = "https://api-test.nicehash.com"
-
-type mining struct{}
-
-var Mining mining
+type miningPrivate struct {
+	client *client
+}
 
 type device struct {
 	ID         string
@@ -93,50 +88,56 @@ type rig struct {
 	RigPowerMode       string //TODO: Enum
 }
 
-//GetAddress get the mining address.
-func (m *mining) GetAddress() (string, error) {
-	type response struct {
+//GetAddress get the miningPrivate address.
+func (m *miningPrivate) GetAddress() (string, error) {
+	m.client.doRequest()
+
+	return "", nil
+
+	/*type response struct {
 		Address string
 	}
 
-	resp, err := httpClient.R().
+	resp, err := m.httpClient.R().
 		SetResult(&response{}).
-		Get(ProdUrl + "/main/api/v2/mining/miningAddress")
+		Get(ProdUrl + "/main/api/v2/miningPrivate/miningAddress")
 
 	if err != nil {
 		return "", err
 	}
 
 	r := resp.Result().(*response)
-	return r.Address, nil
+	return r.Address, nil*/
 }
 
-//GetAlgos list mining algos with basic statistics for organization (and for rig id if specified).
-func (m *mining) GetAlgos(rigId *string) {
+//GetAlgos list miningPrivate algos with basic statistics for organization (and for rig id if specified).
+func (m *miningPrivate) GetAlgos(rigId *string) {
 	//TODO: Implement method
 }
 
 //GetRigsGroups list groups with list of rigs in the groups.
 //When extendedResponse is set to true, response contains number of total and active devices for each rig and group.
-func (m *mining) GetRigsGroups() {
+func (m *miningPrivate) GetRigsGroups() {
 	//TODO: Implement method
 }
 
 //GetRigStats get statistical streams for selected rig.
-func (m *mining) GetRigStats() {
+func (m *miningPrivate) GetRigStats() {
 	//TODO: Implement method
 }
 
 //GetRigStatisticsByAlgo get statistical streams for selected rig and selected algorithm.
-func (m *mining) GetRigStatisticsByAlgo(algo string) {
+func (m *miningPrivate) GetRigStatisticsByAlgo(algo string) {
 	//TODO: Implement method
 }
 
-//GetRigDetails get mining rig detailed information for selected rig.
-func (m *mining) GetRigDetails(rigId string) (*rig, error) {
-	resp, err := httpClient.R().
+//GetRigDetails get miningPrivate rig detailed information for selected rig.
+func (m *miningPrivate) GetRigDetails(rigId string) (*rig, error) {
+	m.client.doRequest()
+
+	/*resp, err := m.httpClient.R().
 		SetResult(&rig{}).
-		Get(fmt.Sprintf("%s/main/api/v2/mining/rig2/%s", ProdUrl, rigId))
+		Get(fmt.Sprintf("%s/main/api/v2/miningPrivate/rig2/%s", ProdUrl, rigId))
 
 	if err != nil {
 		return nil, errors.Wrap(err, "unexpected error")
@@ -151,26 +152,28 @@ func (m *mining) GetRigDetails(rigId string) (*rig, error) {
 		return nil, errors.New("invalid result")
 	}
 
-	return rig, nil
+	return rig, nil*/
+
+	return nil, nil
 }
 
 //GetActiveWorkers get a list of active worker.
-func (m *mining) GetActiveWorkers() {
+func (m *miningPrivate) GetActiveWorkers() {
 	//TODO: Implement method
 }
 
 //GetPayouts get list of payouts.
-func (m *mining) GetPayouts() {
+func (m *miningPrivate) GetPayouts() {
 	//TODO: Implement method
 }
 
-// GetAllRigsStatistics get statistical streams for all mining rigs.
-func (m *mining) GetAllRigsStatistics() {
+// GetAllRigsStatistics get statistical streams for all miningPrivate rigs.
+func (m *miningPrivate) GetAllRigsStatistics() {
 	//TODO: Implement method
 }
 
-//GetAllRigsStatisticsByAlgo get statistical streams for all mining rigs for selected algorithm. Algorithm code can be found in buy info endpoint.
-func (m *mining) GetAllRigsStatisticsByAlgo(algo string) {
+//GetAllRigsStatisticsByAlgo get statistical streams for all miningPrivate rigs for selected algorithm. Algorithm code can be found in buy info endpoint.
+func (m *miningPrivate) GetAllRigsStatisticsByAlgo(algo string) {
 	//TODO: Implement method
 }
 
@@ -178,6 +181,6 @@ func (m *mining) GetAllRigsStatisticsByAlgo(algo string) {
 //Path parameter filters rigs by group.
 //When path is empty, rigs from root group are returned.
 //Rigs can be sorted according to sort parameter.
-func (m *mining) GetAllRigs(algo string) {
+func (m *miningPrivate) GetAllRigs(algo string) {
 	//TODO: Implement method
 }
