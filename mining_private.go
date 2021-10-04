@@ -1,6 +1,8 @@
 package nhclient
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/shopspring/decimal"
 	"math"
 )
@@ -90,7 +92,7 @@ type rig struct {
 
 //GetAddress get the miningPrivate address.
 func (m *miningPrivate) GetAddress() (string, error) {
-	m.client.doRequest()
+	// m.client.doRequest()
 
 	return "", nil
 
@@ -132,29 +134,25 @@ func (m *miningPrivate) GetRigStatisticsByAlgo(algo string) {
 }
 
 //GetRigDetails get miningPrivate rig detailed information for selected rig.
-func (m *miningPrivate) GetRigDetails(rigId string) (*rig, error) {
-	m.client.doRequest()
+func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error) {
+	path := fmt.Sprintf("/main/api/v2/mining/rig2/%s", rigId)
 
-	/*resp, err := m.httpClient.R().
-		SetResult(&rig{}).
-		Get(fmt.Sprintf("%s/main/api/v2/miningPrivate/rig2/%s", ProdUrl, rigId))
+	responseBody, err := m.client.doRequest("GET",
+		path,
+		nil,
+		nil,
+	)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "unexpected error")
+		return nil, err
 	}
 
-	if requestErr, ok := resp.Error().(*requestError); ok {
-		return nil, errors.New(requestErr.Errors[0].Message)
+	err = json.Unmarshal(responseBody, &rig)
+	if err != nil {
+		return nil, err
 	}
 
-	rig, ok := resp.Result().(*rig)
-	if !ok {
-		return nil, errors.New("invalid result")
-	}
-
-	return rig, nil*/
-
-	return nil, nil
+	return rig, nil
 }
 
 //GetActiveWorkers get a list of active worker.

@@ -5,7 +5,7 @@ type general struct{
 }
 
 func (g *general) GetMiningAlgorithms() {
-	g.client.doRequest()
+	//g.client.doRequest()
 
 	/*resp, err := httpClient.R().Get("https://api2.nicehash.com/main/api/v2/mining/algorithms")
 

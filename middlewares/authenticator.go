@@ -9,14 +9,7 @@ import (
 	"net/url"
 )
 
-//TODO: Move Credentials to another package
-type Credentials struct {
-	OrgId     string
-	ApiKey    string
-	ApiSecret string
-}
-
-func NewAuthenticator(credentials *Credentials) resty.RequestMiddleware {
+func NewAuthenticator(orgId, apiKey, secretKey string) resty.RequestMiddleware {
 	return func(client *resty.Client, request *resty.Request) error {
 		separator := string([]byte{0x00})
 
@@ -27,14 +20,14 @@ func NewAuthenticator(credentials *Credentials) resty.RequestMiddleware {
 
 		message := fmt.Sprintf(
 			"%s%s%s%s%s%s%s%s%s%s%s%s%s%s%s",
-			credentials.ApiKey,
+			apiKey,
 			separator,
 			request.Header.Get("X-Time"),
 			separator,
 			request.Header.Get("X-Nonce"),
 			separator,
 			separator,
-			credentials.OrgId,
+			orgId,
 			separator,
 			separator,
 			request.Method,
@@ -44,13 +37,17 @@ func NewAuthenticator(credentials *Credentials) resty.RequestMiddleware {
 			request.QueryParam.Encode(),
 		)
 
-		mac := hmac.New(sha256.New, []byte(credentials.ApiSecret))
+		/*if request.Body != nil {
+			message = fmt.Sprintf("%s%s%s", message, separator, request.Body)
+		} */
+
+		mac := hmac.New(sha256.New, []byte(secretKey))
 		mac.Write([]byte(message))
 
-		auth := fmt.Sprintf("%s:%s", credentials.ApiKey, hex.EncodeToString(mac.Sum(nil)))
+		auth := fmt.Sprintf("%s:%s", apiKey, hex.EncodeToString(mac.Sum(nil)))
 
 		request.SetHeaders(map[string]string{
-			"X-Organization-Id": credentials.OrgId,
+			"X-Organization-Id": orgId,
 			"X-Auth":            auth,
 		})
 
