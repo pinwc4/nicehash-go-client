@@ -36,9 +36,9 @@ package main
 import "github.com/GutoScherer/nicehash-client"
 
 func main() {
-	nhclient.Public.GetMiningAlgorithms()
+	client := nhclient.New().Authenticate("ORG_ID", "API_KEY", "SECRET_KEY")
 
-	miningAddress, err := nhclient.Mining.GetAddress()
+	miningAddress, err := client.Private.Mining.GetAddress()
 }
 ```
 
