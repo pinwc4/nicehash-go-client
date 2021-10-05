@@ -1,4 +1,4 @@
-package middlewares
+package nhclient
 
 import (
 	"crypto/hmac"
@@ -6,10 +6,23 @@ import (
 	"encoding/hex"
 	"fmt"
 	"github.com/go-resty/resty/v2"
+	"github.com/google/uuid"
 	"net/url"
+	"strconv"
+	"time"
 )
 
-func NewAuthenticator(orgId, apiKey, secretKey string) resty.RequestMiddleware {
+var defaultHeaders = func(c *resty.Client, request *resty.Request) error {
+	request.SetHeaders(map[string]string{
+		"X-Time":       strconv.FormatInt(time.Now().UnixMilli(), 10),
+		"X-Nonce":      uuid.NewString(),
+		"X-Request-Id": uuid.NewString(),
+	})
+
+	return nil
+}
+
+func authenticator(orgId, apiKey, secretKey string) resty.RequestMiddleware {
 	return func(client *resty.Client, request *resty.Request) error {
 		separator := string([]byte{0x00})
 

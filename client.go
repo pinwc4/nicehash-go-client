@@ -2,7 +2,6 @@ package nhclient
 
 import (
 	"fmt"
-	"github.com/GutoScherer/nicehash-client/middlewares"
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
 )
@@ -30,7 +29,7 @@ type client struct {
 func New() *client {
 	client := &client{
 		httpClient: resty.New().
-			OnBeforeRequest(middlewares.NewDefaultHeaders()).
+			OnBeforeRequest(defaultHeaders).
 			SetError(&requestError{}),
 	}
 
@@ -64,7 +63,7 @@ func New() *client {
 }
 
 func (c *client) Authenticate(orgId, apiKey, secretKey string) *client {
-	c.httpClient.OnBeforeRequest(middlewares.NewAuthenticator(orgId, apiKey, secretKey))
+	c.httpClient.OnBeforeRequest(authenticator(orgId, apiKey, secretKey))
 
 	return c
 }
@@ -78,12 +77,12 @@ func (c *client) doRequest(method, path string, body interface{}, queryParameter
 		Execute(method, url)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "error executing http request")
 	}
 
-	if _, ok := response.Error().(*requestError); ok {
-		return nil, errors.New("error response")
+	if err, ok := response.Error().(*requestError); ok {
+		return nil, errors.Wrap(err, "API error")
 	}
 
-	return response.Body(), err
+	return response.Body(), nil
 }

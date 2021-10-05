@@ -3,6 +3,7 @@ package nhclient
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/pkg/errors"
 	"github.com/shopspring/decimal"
 	"math"
 )
@@ -92,29 +93,54 @@ type rig struct {
 
 //GetAddress get the miningPrivate address.
 func (m *miningPrivate) GetAddress() (string, error) {
-	// m.client.doRequest()
-
-	return "", nil
-
-	/*type response struct {
-		Address string
-	}
-
-	resp, err := m.httpClient.R().
-		SetResult(&response{}).
-		Get(ProdUrl + "/main/api/v2/miningPrivate/miningAddress")
+	responseBody, err := m.client.doRequest(
+		"GET",
+		"/main/api/v2/mining/miningAddress",
+		nil,
+		nil,
+	)
 
 	if err != nil {
-		return "", err
+		return "", errors.Wrap(err, "getting mining address")
 	}
 
-	r := resp.Result().(*response)
-	return r.Address, nil*/
+	var response struct {
+		Address string
+	}
+	err = json.Unmarshal(responseBody, &response)
+	if err != nil {
+		return "", errors.Wrap(err, "unmarshalling address response body")
+	}
+
+	return response.Address, nil
 }
 
 //GetAlgos list miningPrivate algos with basic statistics for organization (and for rig id if specified).
-func (m *miningPrivate) GetAlgos(rigId *string) {
-	//TODO: Implement method
+func (m *miningPrivate) GetAlgos(rigId string) {
+	responseBody, err := m.client.doRequest(
+		"GET",
+		"/main/api/v2/mining/algo/stats",
+		nil,
+		map[string]string{
+			"rigId": rigId,
+		},
+	)
+
+	fmt.Println(string(responseBody), err)
+
+	/*if err != nil {
+		return "", errors.Wrap(err, "getting mining address")
+	}
+
+	var response struct {
+		Address string
+	}
+	err = json.Unmarshal(responseBody, &response)
+	if err != nil {
+		return "", errors.Wrap(err, "unmarshalling address response body")
+	}
+
+	return response.Address, nil*/
 }
 
 //GetRigsGroups list groups with list of rigs in the groups.
@@ -144,12 +170,12 @@ func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error) {
 	)
 
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "getting rig details")
 	}
 
 	err = json.Unmarshal(responseBody, &rig)
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrap(err, "unmarshalling rig details response body")
 	}
 
 	return rig, nil
