@@ -13,7 +13,7 @@ TABLE OF CONTENTS
 INTRODUCTION
 ---------------------
 
-This client allows you easily integrate the NiceHash API into your GoLang application.
+This client allows you easily integrate the [NiceHash API](https://www.nicehash.com/docs/) into your GoLang application.
 
 REQUIREMENTS
 ---------------------
@@ -36,8 +36,14 @@ package main
 import "github.com/GutoScherer/nicehash-client"
 
 func main() {
-	client := nhclient.New().Authenticate("ORG_ID", "API_KEY", "SECRET_KEY")
+	client := nhclient.New()
 
+	//With this client you can access the public endpoints
+	algos, err := client.Public.Mining.GetAlgorithms()
+	
+	//To access the private endpoints you simply need to call the Authenticate method with your credentials
+	client.Authenticate("ORG_ID", "API_KEY", "SECRET_KEY")
+	
 	miningAddress, err := client.Private.Mining.GetAddress()
 }
 ```
