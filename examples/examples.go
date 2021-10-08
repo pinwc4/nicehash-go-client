@@ -14,9 +14,9 @@ var client = nhclient.New().Authenticate(
 )
 
 func main() {
-	/*printRigDetails()
-	printMiningAddress()*/
-	printAlgos()
+	printRigDetails()
+	/*printMiningAddress()
+	printAlgos()*/
 }
 
 func printAlgos() {

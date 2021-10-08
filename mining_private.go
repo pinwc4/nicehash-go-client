@@ -16,7 +16,7 @@ type device struct {
 	ID         string
 	Name       string
 	DeviceType *struct {
-		EnumName    string //Todo: enum
+		EnumName    deviceType
 		Description string
 	}
 	Temperature                    float64
@@ -24,7 +24,7 @@ type device struct {
 	RevolutionsPerMinute           float64
 	RevolutionsPerMinutePercentage float64
 	PowerMode                      *struct {
-		EnumName    string //Todo: Enum
+		EnumName    powerMode
 		Description string
 	}
 	PowerUsage float64
