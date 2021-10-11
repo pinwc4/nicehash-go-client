@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
+	"net/http"
 )
 
 const ProdUrl = "https://api2.nicehash.com"
@@ -12,11 +13,12 @@ const TestUrl = "https://api-test.nicehash.com"
 type client struct {
 	httpClient *resty.Client
 	Private    *struct {
-		Mining    *miningPrivate
-		Exchange  *exchangePrivate
-		HashPower *hashpowerPrivate
-		Reports   *reports
-		Pools     *pools
+		Accounting *accounting
+		Mining     *miningPrivate
+		Exchange   *exchangePrivate
+		HashPower  *hashpowerPrivate
+		Reports    *reports
+		Pools      *pools
 	}
 	Public *struct {
 		General   *general
@@ -34,17 +36,19 @@ func New() *client {
 	}
 
 	client.Private = &struct {
-		Mining    *miningPrivate
-		Exchange  *exchangePrivate
-		HashPower *hashpowerPrivate
-		Reports   *reports
-		Pools     *pools
+		Accounting *accounting
+		Mining     *miningPrivate
+		Exchange   *exchangePrivate
+		HashPower  *hashpowerPrivate
+		Reports    *reports
+		Pools      *pools
 	}{
-		Mining:    &miningPrivate{client: client},
-		Exchange:  &exchangePrivate{client: client},
-		HashPower: &hashpowerPrivate{client: client},
-		Reports:   &reports{client: client},
-		Pools:     &pools{client: client},
+		Accounting: &accounting{client: client},
+		Mining:     &miningPrivate{client: client},
+		Exchange:   &exchangePrivate{client: client},
+		HashPower:  &hashpowerPrivate{client: client},
+		Reports:    &reports{client: client},
+		Pools:      &pools{client: client},
 	}
 
 	client.Public = &struct {
@@ -78,6 +82,10 @@ func (c *client) doRequest(method, path string, body interface{}, queryParameter
 
 	if err != nil {
 		return nil, errors.Wrap(err, "error executing http request")
+	}
+
+	if response.StatusCode() == http.StatusNotFound {
+		return nil, errInvalidAPIPath
 	}
 
 	if err, ok := response.Error().(*requestError); ok {

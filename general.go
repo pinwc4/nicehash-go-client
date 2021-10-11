@@ -1,13 +1,45 @@
 package nhclient
 
-type general struct{
+type general struct {
 	client *client
 }
 
-func (g *general) GetMiningAlgorithms() {
-	//g.client.doRequest()
+func (g *general) GetMiningAlgorithms() error {
+	g.client.doRequest(
+		"GET",
+		"/main/api/v2/mining/algorithms",
+		nil,
+		nil,
+	)
 
-	/*resp, err := httpClient.R().Get("https://api2.nicehash.com/main/api/v2/mining/algorithms")
+	return errNotImplemented
+}
 
-	fmt.Println(resp, err)*/
+func (g *general) GetMiningMarkets() error {
+	return errNotImplemented
+}
+
+func (g *general) GetCurrencies() error {
+	return errNotImplemented
+}
+func (g *general) GetFeeRules() error {
+	return errNotImplemented
+}
+func (g *general) GetCountries() error {
+	return errNotImplemented
+}
+func (g *general) GetAllowedKMCountries() error {
+	return errNotImplemented
+}
+func (g *general) GetPossiblePermissions() error {
+	return errNotImplemented
+}
+func (g *general) GetAllowedXCHCountries() error {
+	return errNotImplemented
+}
+func (g *general) GetAPIFlags() error {
+	return errNotImplemented
+}
+func (g *general) GetServerTime() error {
+	return errNotImplemented
 }

@@ -4,94 +4,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/pkg/errors"
-	"github.com/shopspring/decimal"
-	"math"
 )
 
 type miningPrivate struct {
 	client *client
 }
 
-type device struct {
-	ID         string
-	Name       string
-	DeviceType *struct {
-		EnumName    deviceType
-		Description string
-	}
-	Temperature                    float64
-	Load                           float64
-	RevolutionsPerMinute           float64
-	RevolutionsPerMinutePercentage float64
-	PowerMode                      *struct {
-		EnumName    powerMode
-		Description string
-	}
-	PowerUsage float64
-	Speeds     []*struct {
-		Algorithm     string //Todo: Enum
-		Title         string
-		Speed         string //TODO: Check float
-		DisplaySuffix string
-	}
-	Intensity *struct {
-		EnumName    string //Todo: Enum
-		Description string
-	}
-	NHQM string
-}
-
-func (d *device) GetMemoryTemperature() float64 {
-	return d.Temperature / 65536
-}
-
-func (d *device) GetCoreTemperature() float64 {
-	return math.Mod(d.Temperature, 65536)
-}
-
-type stats struct {
-	StatsTime int64
-	Market    string //TODO: Enum
-	Algorithm *struct {
-		EnumName    string //TODO: Enum
-		Description string
-	}
-	UnpaidAmount             decimal.Decimal
-	Difficulty               float64
-	ProxyID                  int64
-	TimeConnected            int64
-	XNSub                    bool
-	SpeedAccepted            float64
-	SpeedRejectedR1Target    float64
-	SpeedRejectedR2Stale     float64
-	SpeedRejectedR3Duplicate float64
-	SpeedRejectedR4NTime     float64
-	SpeedRejectedR5Other     float64
-	SpeedRejectedTotal       float64
-	Profitability            float64
-}
-
-type rig struct {
-	Id                 string `json:"rigId"`
-	RigType            string `json:"type"` //TODO: Enum
-	Name               string
-	StatusTime         int64
-	JoinTime           int64
-	MinerStatus        string //TODO: Enum
-	GroupName          string
-	UnpaidAmount       decimal.Decimal
-	Notifications      []string //TODO: Enum
-	SoftwareVersions   string
-	Devices            []*device
-	CPUMiningEnabled   bool
-	CPUExists          bool
-	Stats              []*stats
-	Profitability      decimal.Decimal
-	LocalProfitability decimal.Decimal
-	RigPowerMode       string //TODO: Enum
-}
-
-//GetAddress get the miningPrivate address.
+//GetAddress get the mining address.
 func (m *miningPrivate) GetAddress() (string, error) {
 	responseBody, err := m.client.doRequest(
 		"GET",
@@ -115,52 +34,53 @@ func (m *miningPrivate) GetAddress() (string, error) {
 	return response.Address, nil
 }
 
-//GetAlgos list miningPrivate algos with basic statistics for organization (and for rig id if specified).
-func (m *miningPrivate) GetAlgos(rigId string) {
+//GetRigsGroups list groups with list of rigs in the groups.
+//When extendedResponse is set to true, response contains number of total and active devices for each rig and group.
+func (m *miningPrivate) GetRigsGroups() error {
+	//TODO: Implement method
+	return errNotImplemented
+}
+
+//GetAlgoStatistics list mining algos with basic statistics for organization (and for rig id if specified).
+func (m *miningPrivate) GetAlgoStatistics() error {
 	responseBody, err := m.client.doRequest(
 		"GET",
 		"/main/api/v2/mining/algo/stats",
 		nil,
-		map[string]string{
-			"rigId": rigId,
-		},
+		nil,
 	)
 
 	fmt.Println(string(responseBody), err)
 
-	/*if err != nil {
-		return "", errors.Wrap(err, "getting mining address")
-	}
-
-	var response struct {
-		Address string
-	}
-	err = json.Unmarshal(responseBody, &response)
-	if err != nil {
-		return "", errors.Wrap(err, "unmarshalling address response body")
-	}
-
-	return response.Address, nil*/
+	return errNotImplemented
 }
 
-//GetRigsGroups list groups with list of rigs in the groups.
-//When extendedResponse is set to true, response contains number of total and active devices for each rig and group.
-func (m *miningPrivate) GetRigsGroups() {
+//GetRigStatistics get statistical streams for selected rig.
+func (m *miningPrivate) GetRigStatisticsByAlgo() error {
 	//TODO: Implement method
+	return errNotImplemented
 }
 
-//GetRigStats get statistical streams for selected rig.
-func (m *miningPrivate) GetRigStats() {
+//GetRigUnpaidStatistics get statistical streams for unpaid amounts
+func (m *miningPrivate) GetRigUnpaidStatistics() error {
 	//TODO: Implement method
+	return errNotImplemented
 }
 
-//GetRigStatisticsByAlgo get statistical streams for selected rig and selected algorithm.
-func (m *miningPrivate) GetRigStatisticsByAlgo(algo string) {
+// GetMinerStatisticsByAlgo get statistical streams for all mining rigs by algorithm.
+func (m *miningPrivate) GetMinerStatisticsByAlgo() error {
 	//TODO: Implement method
+	return errNotImplemented
 }
 
-//GetRigDetails get miningPrivate rig detailed information for selected rig.
-func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error) {
+//GetAllRigsStatisticsByAlgo get statistical streams for all mining rigs for selected algorithm. Algorithm code can be found in buy info endpoint.
+func (m *miningPrivate) GetMinerUnpaidStatistics() error {
+	//TODO: Implement method
+	return errNotImplemented
+}
+
+//GetRigDetails get mining rig detailed information for selected rig.
+func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error)  {
 	path := fmt.Sprintf("/main/api/v2/mining/rig2/%s", rigId)
 
 	responseBody, err := m.client.doRequest("GET",
@@ -182,29 +102,25 @@ func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error) {
 }
 
 //GetActiveWorkers get a list of active worker.
-func (m *miningPrivate) GetActiveWorkers() {
+func (m *miningPrivate) GetActiveWorkers() error {
 	//TODO: Implement method
+	return errNotImplemented
 }
 
 //GetPayouts get list of payouts.
-func (m *miningPrivate) GetPayouts() {
+func (m *miningPrivate) GetPayouts() error {
 	//TODO: Implement method
-}
-
-// GetAllRigsStatistics get statistical streams for all miningPrivate rigs.
-func (m *miningPrivate) GetAllRigsStatistics() {
-	//TODO: Implement method
-}
-
-//GetAllRigsStatisticsByAlgo get statistical streams for all miningPrivate rigs for selected algorithm. Algorithm code can be found in buy info endpoint.
-func (m *miningPrivate) GetAllRigsStatisticsByAlgo(algo string) {
-	//TODO: Implement method
+	return errNotImplemented
 }
 
 //GetAllRigs list rigs and their statuses.
 //Path parameter filters rigs by group.
 //When path is empty, rigs from root group are returned.
 //Rigs can be sorted according to sort parameter.
-func (m *miningPrivate) GetAllRigs(algo string) {
+func (m *miningPrivate) GetAllRigs(algo string) error {
 	//TODO: Implement method
+	return errNotImplemented
 }
+
+//------------------------//
+//TODO: Implement POST method

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/GutoScherer/nicehash-client"
-	"github.com/davecgh/go-spew/spew"
 	"os"
 )
 
@@ -14,29 +13,17 @@ var client = nhclient.New().Authenticate(
 )
 
 func main() {
-	printRigDetails()
-	/*printMiningAddress()
-	printAlgos()*/
-}
-
-func printAlgos() {
-	client.Private.Mining.GetAlgos("")
-}
-
-func printMiningAddress() {
-	addr, err := client.Private.Mining.GetAddress()
-	if err != nil {
-		fmt.Println(err)
-	} else {
-		spew.Dump(addr)
-	}
-}
-
-func printRigDetails() {
 	rig, err := client.Private.Mining.GetRigDetails(os.Getenv("RIG_ID"))
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		spew.Dump(rig)
+		for _, device := range rig.Devices {
+			if device.Status.EnumName == nhclient.DeviceStatusMining {
+				fmt.Println(device.Name + " is mining!")
+			} else {
+				fmt.Println(device.Name + " is " + device.Status.Description)
+			}
+		}
+		//spew.Dump(rig)
 	}
 }
