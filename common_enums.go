@@ -2,10 +2,10 @@ package nhclient
 
 import "encoding/json"
 
-type algorithm uint
+type algoEnum uint
 
 const (
-	AlgorithmScrypt algorithm = iota
+	AlgorithmScrypt algoEnum = iota
 	AlgorithmSHA256
 	AlgorithmX11
 	AlgorithmX13
@@ -38,8 +38,8 @@ const (
 	AlgorithmAutolykos
 )
 
-func (e algorithm) String() string {
-	return map[algorithm]string{
+func (e algoEnum) String() string {
+	return map[algoEnum]string{
 		AlgorithmScrypt:          "SCRYPT",
 		AlgorithmSHA256:          "SHA256",
 		AlgorithmX11:             "X11",
@@ -74,8 +74,8 @@ func (e algorithm) String() string {
 	}[e]
 }
 
-func (e *algorithm) FromString(es string) algorithm {
-	return map[string]algorithm{
+func (e *algoEnum) FromString(es string) algoEnum {
+	return map[string]algoEnum{
 		"SCRYPT":          AlgorithmScrypt,
 		"SHA256":          AlgorithmSHA256,
 		"X11":             AlgorithmX11,
@@ -110,11 +110,11 @@ func (e *algorithm) FromString(es string) algorithm {
 	}[es]
 }
 
-func (e algorithm) MarshalJSON() ([]byte, error) {
+func (e algoEnum) MarshalJSON() ([]byte, error) {
 	return json.Marshal(e.String())
 }
 
-func (e *algorithm) UnmarshalJSON(bytes []byte) error {
+func (e *algoEnum) UnmarshalJSON(bytes []byte) error {
 	var s string
 	err := json.Unmarshal(bytes, &s)
 	if err != nil {

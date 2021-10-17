@@ -94,3 +94,10 @@ func (c *client) doRequest(method, path string, body interface{}, queryParameter
 
 	return response.Body(), nil
 }
+
+func WithOptionalParameter(key, value string) *optionalParameter {
+	return &optionalParameter{
+		key:   key,
+		value: value,
+	}
+}

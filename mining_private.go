@@ -6,6 +6,10 @@ import (
 	"github.com/pkg/errors"
 )
 
+type optionalParameter struct {
+	key, value string
+}
+
 type miningPrivate struct {
 	client *client
 }
@@ -20,7 +24,7 @@ func (m *miningPrivate) GetAddress() (string, error) {
 	)
 
 	if err != nil {
-		return "", errors.Wrap(err, "getting mining address")
+		return "", errors.Wrap(err, "executing request")
 	}
 
 	var response struct {
@@ -28,31 +32,70 @@ func (m *miningPrivate) GetAddress() (string, error) {
 	}
 	err = json.Unmarshal(responseBody, &response)
 	if err != nil {
-		return "", errors.Wrap(err, "unmarshalling address response body")
+		return "", errors.Wrap(err, "unmarshalling response body")
 	}
 
 	return response.Address, nil
 }
 
+//TODO: Implement struct
+type rigsGroups struct{}
+
 //GetRigsGroups list groups with list of rigs in the groups.
 //When extendedResponse is set to true, response contains number of total and active devices for each rig and group.
-func (m *miningPrivate) GetRigsGroups() error {
-	//TODO: Implement method
-	return errNotImplemented
-}
+func (m *miningPrivate) GetRigsGroups(parameters ...*optionalParameter) (rg *rigsGroups, err error) {
+	//TODO: Optional query parameter extendedResponse (bool)
+	path := "/main/api/v2/mining/groups/list"
 
-//GetAlgoStatistics list mining algos with basic statistics for organization (and for rig id if specified).
-func (m *miningPrivate) GetAlgoStatistics() error {
+	queryParameters := make(map[string]string, 0)
+	for _, parameter := range parameters {
+		queryParameters[parameter.key] = parameter.value
+	}
+
 	responseBody, err := m.client.doRequest(
 		"GET",
-		"/main/api/v2/mining/algo/stats",
+		path,
+		nil,
+		queryParameters,
+	)
+
+	if err != nil {
+		return nil, errors.Wrap(err, "executing request")
+	}
+
+	err = json.Unmarshal(responseBody, &rg)
+	if err != nil {
+		return nil, errors.Wrap(err, "unmarshalling response body")
+	}
+
+	return rg, nil
+}
+
+//TODO: Implement struct
+type algoStatistics struct{}
+
+//GetAlgoStatistics list mining algos with basic statistics for organization (and for rig id if specified).
+func (m *miningPrivate) GetAlgoStatistics() (algoStats *algoStatistics, err error) {
+	//TODO: Optional query parameter rigId (string)
+	path := "/main/api/v2/mining/algo/stats"
+
+	responseBody, err := m.client.doRequest(
+		"GET",
+		path,
 		nil,
 		nil,
 	)
 
-	fmt.Println(string(responseBody), err)
+	if err != nil {
+		return nil, errors.Wrap(err, "executing request")
+	}
 
-	return errNotImplemented
+	err = json.Unmarshal(responseBody, &algoStats)
+	if err != nil {
+		return nil, errors.Wrap(err, "unmarshalling response body")
+	}
+
+	return algoStats, nil
 }
 
 //GetRigStatistics get statistical streams for selected rig.
@@ -80,7 +123,7 @@ func (m *miningPrivate) GetMinerUnpaidStatistics() error {
 }
 
 //GetRigDetails get mining rig detailed information for selected rig.
-func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error)  {
+func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error) {
 	path := fmt.Sprintf("/main/api/v2/mining/rig2/%s", rigId)
 
 	responseBody, err := m.client.doRequest("GET",
@@ -90,12 +133,12 @@ func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error)  {
 	)
 
 	if err != nil {
-		return nil, errors.Wrap(err, "getting rig details")
+		return nil, errors.Wrap(err, "executing request")
 	}
 
 	err = json.Unmarshal(responseBody, &rig)
 	if err != nil {
-		return nil, errors.Wrap(err, "unmarshalling rig details response body")
+		return nil, errors.Wrap(err, "unmarshalling response body")
 	}
 
 	return rig, nil

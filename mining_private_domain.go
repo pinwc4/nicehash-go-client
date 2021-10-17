@@ -27,7 +27,7 @@ type device struct {
 	}
 	PowerUsage float64
 	Speeds     []*struct {
-		Algorithm     algorithm
+		Algorithm     algoEnum
 		Title         string
 		Speed         string //Wrong type on doc
 		DisplaySuffix string

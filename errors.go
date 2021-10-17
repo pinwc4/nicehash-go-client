@@ -21,5 +21,3 @@ func (r *requestError) Error() string {
 
 	return string(errors)
 }
-
-

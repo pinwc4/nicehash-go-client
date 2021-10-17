@@ -18,12 +18,12 @@ func main() {
 		fmt.Println(err)
 	} else {
 		for _, device := range rig.Devices {
-			if device.Status.EnumName == nhclient.DeviceStatusMining {
-				fmt.Println(device.Name + " is mining!")
-			} else {
-				fmt.Println(device.Name + " is " + device.Status.Description)
-			}
+			fmt.Println(device.Name + " is " + device.Status.Description)
 		}
 		//spew.Dump(rig)
 	}
+
+	fmt.Println("---------------")
+
+	client.Private.Mining.GetRigsGroups(nhclient.WithOptionalParameter("extendedResponse", "true"))
 }
