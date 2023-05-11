@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	nhclient "github.com/pinwc4/nicehash-client"
+	nhclient "github.com/pinwc4/nicehash-go-client"
 )
 
 var client = nhclient.New().Authenticate(
