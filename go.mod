@@ -1,4 +1,4 @@
-module github.com/GutoScherer/nicehash-client
+module github.com/pinwc4/nicehash-client
 
 go 1.17
 

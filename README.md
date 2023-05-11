@@ -24,7 +24,7 @@ INSTALLATION
 ---------------------
 
 ```bash
- go get github.com/GutoScherer/nicehash-client
+ go get github.com/pinwc4/nicehash-client
 ```
 
 CONFIGURATION
@@ -33,7 +33,7 @@ CONFIGURATION
 ```go
 package main
 
-import "github.com/GutoScherer/nicehash-client"
+import "github.com/pinwc4/nicehash-client"
 
 func main() {
 	client := nhclient.New()
@@ -47,11 +47,6 @@ func main() {
 	miningAddress, err := client.Private.Mining.GetAddress()
 }
 ```
-
-MAINTAINERS
----------------------
-
-- Luiz Augusto Solheid Scherer - https://github.com/GutoScherer
 
 TODO
 ----

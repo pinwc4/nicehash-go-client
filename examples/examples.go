@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/GutoScherer/nicehash-client"
 	"os"
+
+	nhclient "github.com/pinwc4/nicehash-client"
 )
 
 var client = nhclient.New().Authenticate(
