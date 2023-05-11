@@ -2,29 +2,33 @@ package main
 
 import (
 	"fmt"
-	"os"
+	//"os"
 
 	nhclient "github.com/pinwc4/nicehash-go-client"
 )
 
-var client = nhclient.New().Authenticate(
-	os.Getenv("ORG_ID"),
-	os.Getenv("API_KEY"),
-	os.Getenv("API_SECRET"),
-)
+//var client = nhclient.New().Authenticate(
+//	os.Getenv("ORG_ID"),
+//	os.Getenv("API_KEY"),
+//	os.Getenv("API_SECRET"),
+//)
+
+var client = nhclient.New()
 
 func main() {
-	rig, err := client.Private.Mining.GetRigDetails(os.Getenv("RIG_ID"))
+	//rig, err := client.Private.Mining.GetRigDetails(os.Getenv("RIG_ID"))
+	info2, err := client.Public.General.GetMiningAlgorithms()
 	if err != nil {
 		fmt.Println(err)
 	} else {
-		for _, device := range rig.Devices {
-			fmt.Println(device.Name + " is " + device.Status.Description)
-		}
-		//spew.Dump(rig)
-	}
+		fmt.Println("---------------")
+		fmt.Println(info2)
 
-	fmt.Println("---------------")
+		fmt.Println("---------------")
+		fmt.Println(info2["SCRYPT"])
+		fmt.Println(info2["SCRYPT"].Algorithm)
+		fmt.Println(info2["SCRYPT"].MinimalPoolDifficulty)
+	}
 
 	client.Private.Mining.GetRigsGroups(nhclient.WithOptionalParameter("extendedResponse", "true"))
 }

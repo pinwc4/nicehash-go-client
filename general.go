@@ -20,23 +20,24 @@ type miningAlgoInfo struct {
 	Enabled               bool
 	Order                 int64
 	DisplayMiningFactor   string
-	MiningFactor          float64
+	MiningFactor          string
 	DisplayMarketFactor   string
-	MarketFactor          float64
-	MinimalOrderAmount    float64
-	MinSpeedLimit         float64
-	MaxSpeedLimit         float64
-	PriceDownStep         float64
-	MinimalPoolDifficulty float64
+	MarketFactor          string
+	MinimalOrderAmount    string
+	MinSpeedLimit         string
+	MaxSpeedLimit         string
+	PriceDownStep         string
+	MinimalPoolDifficulty string
 	Port                  int64
 	Color                 string
 	OrdersEnabled         bool
 	EnabledMarkets        string
 	DisplayPriceFactor    string
-	PriceFactor           float64
+	PriceFactor           string
 }
 
-func (g *general) GetMiningAlgorithms() (algos *miningAlgoList, err error) {
+func (g *general) GetMiningAlgorithms() (algomap map[string]*miningAlgoInfo, err error) {
+	algomap = make(map[string]*miningAlgoInfo)
 	responseBody, err := g.client.doRequest(
 		"GET",
 		"/main/api/v2/mining/algorithms",
@@ -48,12 +49,16 @@ func (g *general) GetMiningAlgorithms() (algos *miningAlgoList, err error) {
 		return nil, errors.Wrap(err, "executing request")
 	}
 
+	var algos miningAlgoList
 	err = json.Unmarshal(responseBody, &algos)
 	if err != nil {
 		return nil, errors.Wrap(err, "unmarshalling response body")
 	}
 
-	return algos, nil
+	for _, algo := range algos.MiningAlgorithms {
+		algomap[algo.Algorithm] = algo
+	}
+	return algomap, nil
 
 }
 
