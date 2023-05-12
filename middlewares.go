@@ -5,11 +5,12 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
-	"github.com/go-resty/resty/v2"
-	"github.com/google/uuid"
 	"net/url"
 	"strconv"
 	"time"
+
+	"github.com/go-resty/resty/v2"
+	"github.com/google/uuid"
 )
 
 var defaultHeaders = func(c *resty.Client, request *resty.Request) error {
@@ -17,6 +18,7 @@ var defaultHeaders = func(c *resty.Client, request *resty.Request) error {
 		"X-Time":       strconv.FormatInt(time.Now().UnixMilli(), 10),
 		"X-Nonce":      uuid.NewString(),
 		"X-Request-Id": uuid.NewString(),
+		"Content-Type": "application/json",
 	})
 
 	return nil
@@ -50,9 +52,9 @@ func authenticator(orgId, apiKey, secretKey string) resty.RequestMiddleware {
 			request.QueryParam.Encode(),
 		)
 
-		/*if request.Body != nil {
+		if request.Body != nil {
 			message = fmt.Sprintf("%s%s%s", message, separator, request.Body)
-		} */
+		}
 
 		mac := hmac.New(sha256.New, []byte(secretKey))
 		mac.Write([]byte(message))

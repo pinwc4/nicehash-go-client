@@ -19,21 +19,21 @@ type miningAlgoInfo struct {
 	Title                 string
 	Enabled               bool
 	Order                 int64
-	DisplayMiningFactor   string
-	MiningFactor          string
-	DisplayMarketFactor   string
-	MarketFactor          string
-	MinimalOrderAmount    string
-	MinSpeedLimit         string
-	MaxSpeedLimit         string
-	PriceDownStep         string
-	MinimalPoolDifficulty string
+	DisplayMiningFactor   string `json:"displayMiningFactor"`
+	MiningFactor          string `json:"miningFactor"`
+	DisplayMarketFactor   string `json:"displayMarketFactor"`
+	MarketFactor          string `json:"marketFactor"`
+	MinimalOrderAmount    string `json:"minimalOrderAmount"`
+	MinSpeedLimit         string `json:"minSpeedLimit"`
+	MaxSpeedLimit         string `json:"maxSpeedLimit"`
+	PriceDownStep         string `json:"priceDownStep"`
+	MinimalPoolDifficulty string `json:"minimalPoolDifficulty"`
 	Port                  int64
 	Color                 string
 	OrdersEnabled         bool
-	EnabledMarkets        string
-	DisplayPriceFactor    string
-	PriceFactor           string
+	EnabledMarkets        string `json:"enabledMarkets"`
+	DisplayPriceFactor    string `json:"displayPriceFactor"`
+	PriceFactor           string `json:"priceFactor"`
 }
 
 func (g *general) GetMiningAlgorithms() (algomap map[string]*miningAlgoInfo, err error) {
