@@ -1,8 +1,8 @@
 package nhclient
 
 import (
-	"encoding/json"
-
+	//"encoding/json"
+	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 )
 
@@ -50,7 +50,9 @@ func (g *general) GetMiningAlgorithms() (algomap map[string]*miningAlgoInfo, err
 	}
 
 	var algos miningAlgoList
+
 	err = json.Unmarshal(responseBody, &algos)
+
 	if err != nil {
 		return nil, errors.Wrap(err, "unmarshalling response body")
 	}

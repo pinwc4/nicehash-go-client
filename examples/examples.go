@@ -27,7 +27,7 @@ func main() {
 		fmt.Println("---------------")
 		fmt.Println(info2["SCRYPT"])
 		fmt.Println(info2["SCRYPT"].Algorithm)
-		fmt.Println(info2["SCRYPT"].MinimalPoolDifficulty)
+		fmt.Println(info2["SCRYPT"].MarketFactor)
 		fmt.Println("---------------")
 	}
 
