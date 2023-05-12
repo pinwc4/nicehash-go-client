@@ -28,7 +28,17 @@ func main() {
 		fmt.Println(info2["SCRYPT"])
 		fmt.Println(info2["SCRYPT"].Algorithm)
 		fmt.Println(info2["SCRYPT"].MinimalPoolDifficulty)
+		fmt.Println("---------------")
 	}
+
+	info3, err3 := client.Public.HashPower.GetOrderBook("DAGGERHASHIMOTO")
+	if err3 != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(info3)
+	fmt.Println(info3.Stats.EU.Orders[0])
+	fmt.Println(info3.Stats.EU.UpdatedTs)
 
 	client.Private.Mining.GetRigsGroups(nhclient.WithOptionalParameter("extendedResponse", "true"))
 }
