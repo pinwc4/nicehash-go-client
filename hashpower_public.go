@@ -1,8 +1,8 @@
 package nhclient
 
 import (
-	"encoding/json"
-
+	//"encoding/json"
+	"github.com/goccy/go-json"
 	"github.com/pkg/errors"
 )
 
@@ -18,13 +18,13 @@ type orderBook struct {
 }
 
 type orderBookDetails struct {
-	UpdatedTs           string
-	TotalSpeed          string
-	MarketFactor        string
-	DisplayMarketFactor string
-	PriceFactor         string
-	DisplayPriceFactor  string
-	Orders              []*struct {
+	UpdatedTs  string
+	TotalSpeed string
+	//MarketFactor        string
+	//DisplayMarketFactor string
+	//PriceFactor         string
+	//DisplayPriceFactor  string
+	Orders []*struct {
 		Id            string
 		Type          string
 		Price         string
@@ -34,11 +34,11 @@ type orderBookDetails struct {
 		PayingSpeed   string
 		Alive         bool
 	}
-	Pagination *struct {
-		size           int64
-		page           int64
-		totalPageCount int64
-	}
+	//Pagination *struct {
+	//	size           int64
+	//	page           int64
+	//	totalPageCount int64
+	//}
 }
 
 func (h *hashpowerPublic) GetOrderBook(algo string) (orderBook *orderBook, err error) {
@@ -60,10 +60,10 @@ func (h *hashpowerPublic) GetOrderBook(algo string) (orderBook *orderBook, err e
 	}
 
 	err = json.Unmarshal(responseBody, &orderBook)
+
 	if err != nil {
 		return nil, errors.Wrap(err, "unmarshalling response body")
 	}
 
 	return orderBook, nil
-
 }

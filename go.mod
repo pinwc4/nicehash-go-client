@@ -9,4 +9,7 @@ require (
 	github.com/shopspring/decimal v1.2.0
 )
 
-require golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
+require (
+	github.com/goccy/go-json v0.10.2
+	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 // indirect
+)

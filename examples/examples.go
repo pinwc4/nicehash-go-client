@@ -38,7 +38,6 @@ func main() {
 
 	fmt.Println(info3)
 	fmt.Println(info3.Stats.EU.Orders[0])
-	fmt.Println(info3.Stats.EU.UpdatedTs)
 
 	client.Private.Mining.GetRigsGroups(nhclient.WithOptionalParameter("extendedResponse", "true"))
 }
