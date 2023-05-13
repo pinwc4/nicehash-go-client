@@ -1,6 +1,6 @@
 package nhclient
 
-type miningPublic struct{
+type miningPublic struct {
 	client *client
 }
 
@@ -20,5 +20,3 @@ func (m *miningPublic) GetWithdrawalsByBTCAddress() error {
 func (m *miningPublic) GetMinerStatusByBTCAddress() error {
 	return errNotImplemented
 }
-
-

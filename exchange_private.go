@@ -1,6 +1,5 @@
 package nhclient
 
-type exchangePrivate struct{
+type exchangePrivate struct {
 	client *client
 }
-

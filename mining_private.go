@@ -14,7 +14,7 @@ type miningPrivate struct {
 	client *client
 }
 
-//GetAddress get the mining address.
+// GetAddress get the mining address.
 func (m *miningPrivate) GetAddress() (string, error) {
 	responseBody, err := m.client.doRequest(
 		"GET",
@@ -38,11 +38,11 @@ func (m *miningPrivate) GetAddress() (string, error) {
 	return response.Address, nil
 }
 
-//TODO: Implement struct
+// TODO: Implement struct
 type rigsGroups struct{}
 
-//GetRigsGroups list groups with list of rigs in the groups.
-//When extendedResponse is set to true, response contains number of total and active devices for each rig and group.
+// GetRigsGroups list groups with list of rigs in the groups.
+// When extendedResponse is set to true, response contains number of total and active devices for each rig and group.
 func (m *miningPrivate) GetRigsGroups(parameters ...*optionalParameter) (rg *rigsGroups, err error) {
 	//TODO: Optional query parameter extendedResponse (bool)
 	path := "/main/api/v2/mining/groups/list"
@@ -71,10 +71,10 @@ func (m *miningPrivate) GetRigsGroups(parameters ...*optionalParameter) (rg *rig
 	return rg, nil
 }
 
-//TODO: Implement struct
+// TODO: Implement struct
 type algoStatistics struct{}
 
-//GetAlgoStatistics list mining algos with basic statistics for organization (and for rig id if specified).
+// GetAlgoStatistics list mining algos with basic statistics for organization (and for rig id if specified).
 func (m *miningPrivate) GetAlgoStatistics() (algoStats *algoStatistics, err error) {
 	//TODO: Optional query parameter rigId (string)
 	path := "/main/api/v2/mining/algo/stats"
@@ -98,13 +98,13 @@ func (m *miningPrivate) GetAlgoStatistics() (algoStats *algoStatistics, err erro
 	return algoStats, nil
 }
 
-//GetRigStatistics get statistical streams for selected rig.
+// GetRigStatistics get statistical streams for selected rig.
 func (m *miningPrivate) GetRigStatisticsByAlgo() error {
 	//TODO: Implement method
 	return errNotImplemented
 }
 
-//GetRigUnpaidStatistics get statistical streams for unpaid amounts
+// GetRigUnpaidStatistics get statistical streams for unpaid amounts
 func (m *miningPrivate) GetRigUnpaidStatistics() error {
 	//TODO: Implement method
 	return errNotImplemented
@@ -116,13 +116,13 @@ func (m *miningPrivate) GetMinerStatisticsByAlgo() error {
 	return errNotImplemented
 }
 
-//GetAllRigsStatisticsByAlgo get statistical streams for all mining rigs for selected algorithm. Algorithm code can be found in buy info endpoint.
+// GetAllRigsStatisticsByAlgo get statistical streams for all mining rigs for selected algorithm. Algorithm code can be found in buy info endpoint.
 func (m *miningPrivate) GetMinerUnpaidStatistics() error {
 	//TODO: Implement method
 	return errNotImplemented
 }
 
-//GetRigDetails get mining rig detailed information for selected rig.
+// GetRigDetails get mining rig detailed information for selected rig.
 func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error) {
 	path := fmt.Sprintf("/main/api/v2/mining/rig2/%s", rigId)
 
@@ -144,22 +144,22 @@ func (m *miningPrivate) GetRigDetails(rigId string) (rig *rig, err error) {
 	return rig, nil
 }
 
-//GetActiveWorkers get a list of active worker.
+// GetActiveWorkers get a list of active worker.
 func (m *miningPrivate) GetActiveWorkers() error {
 	//TODO: Implement method
 	return errNotImplemented
 }
 
-//GetPayouts get list of payouts.
+// GetPayouts get list of payouts.
 func (m *miningPrivate) GetPayouts() error {
 	//TODO: Implement method
 	return errNotImplemented
 }
 
-//GetAllRigs list rigs and their statuses.
-//Path parameter filters rigs by group.
-//When path is empty, rigs from root group are returned.
-//Rigs can be sorted according to sort parameter.
+// GetAllRigs list rigs and their statuses.
+// Path parameter filters rigs by group.
+// When path is empty, rigs from root group are returned.
+// Rigs can be sorted according to sort parameter.
 func (m *miningPrivate) GetAllRigs(algo string) error {
 	//TODO: Implement method
 	return errNotImplemented

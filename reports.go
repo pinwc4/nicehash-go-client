@@ -1,6 +1,5 @@
 package nhclient
 
-type reports struct{
+type reports struct {
 	client *client
 }
-

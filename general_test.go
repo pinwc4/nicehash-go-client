@@ -11,7 +11,7 @@ func Test_general_GetMiningAlgorithms(t *testing.T) {
 		fields fields
 	}{
 		{
-			name:   "Test 1",
+			name: "Test 1",
 			fields: fields{
 				client: New(),
 			},
