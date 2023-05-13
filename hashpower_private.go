@@ -51,3 +51,19 @@ func (h *hashpowerPrivate) CreateOrder(algo *miningAlgoInfo, market string, pool
 
 	return orderInfo, nil
 }
+
+func (h *hashpowerPrivate) CancelOrder(orderid string) (err error) {
+	path := fmt.Sprintf("/main/api/v2/hashpower/order/%s", orderid)
+
+	_, err = h.client.doRequest(
+		"DELETE",
+		path,
+		nil,
+		nil,
+	)
+
+	if err != nil {
+		return errors.Wrap(err, "executing request")
+	}
+	return nil
+}
