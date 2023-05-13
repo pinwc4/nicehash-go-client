@@ -13,9 +13,9 @@ func main() {
 
 	clientp := nhclient.New()
 	clientp.Authenticate(
-		"orgid",
-		"apikey",
-		"secretkey",
+		"org",
+		"key",
+		"secret",
 	)
 
 	miningAddress, err := clientp.Private.Mining.GetAddress()
@@ -50,15 +50,19 @@ func main() {
 	fmt.Println(info3.Stats.EU.Orders[0])
 	fmt.Println("---------------")
 
-	info4, err4 := clientp.Private.HashPower.CreateOrder(info2["ETCHASH"], "EU", "poolid", 1.0011, 1.02, 1.001)
-
-	if err4 != nil {
-		fmt.Println("error with creating order")
-		fmt.Println(err4)
-	}
-
-	fmt.Println(info4)
+	fmt.Println(os.Getenv("$TESTENV"))
 	fmt.Println("---------------")
 
-	fmt.Println(os.Getenv("$TESTENV"))
+	info5, err5 := clientp.Private.HashPower.GetMyOrders("ETCHASH", "EU")
+
+	if err5 != nil {
+		fmt.Println("error gettin")
+		fmt.Println(err5)
+	} else {
+		fmt.Println("gotten")
+		fmt.Println(info5)
+		fmt.Println(len(info5.List))
+		//fmt.Println(info5.List[1])
+	}
+	fmt.Println("---------------")
 }
