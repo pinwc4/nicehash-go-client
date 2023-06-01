@@ -2,9 +2,11 @@ package nhclient
 
 import (
 	"fmt"
+	"net"
+	"net/http"
+
 	"github.com/go-resty/resty/v2"
 	"github.com/pkg/errors"
-	"net/http"
 )
 
 const ProdUrl = "https://api2.nicehash.com"
@@ -29,10 +31,26 @@ type client struct {
 }
 
 func New() *client {
+	return NewWithAddress("")
+}
+
+func NewWithAddress(connectaddress string) *client {
 	client := &client{
 		httpClient: resty.New().
 			OnBeforeRequest(defaultHeaders).
 			SetError(&requestError{}),
+	}
+	if connectaddress != "" {
+		tempaddr := connectaddress + ":0"
+		addr, err := net.ResolveTCPAddr("tcp", tempaddr)
+		if err != nil {
+			fmt.Println("error using", connectaddress)
+			return nil
+		}
+		dialer := &net.Dialer{LocalAddr: addr}
+		ptransport := &http.Transport{Dial: dialer.Dial}
+		client.httpClient.SetTransport(ptransport)
+
 	}
 
 	client.Private = &struct {

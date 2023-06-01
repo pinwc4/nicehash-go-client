@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"time"
 
 	nhclient "github.com/pinwc4/nicehash-go-client"
 )
@@ -11,7 +12,7 @@ var client = nhclient.New()
 
 func main() {
 
-	clientp := nhclient.New()
+	clientp := nhclient.NewWithAddress("")
 	clientp.Authenticate(
 		"org",
 		"key",
@@ -65,4 +66,5 @@ func main() {
 		//fmt.Println(info5.List[1])
 	}
 	fmt.Println("---------------")
+	time.Sleep(8 * time.Minute)
 }
