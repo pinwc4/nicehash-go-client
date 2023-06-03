@@ -12,7 +12,7 @@ import (
 const ProdUrl = "https://api2.nicehash.com"
 const TestUrl = "https://api-test.nicehash.com"
 
-type client struct {
+type Client struct {
 	httpClient *resty.Client
 	Private    *struct {
 		Accounting *accounting
@@ -30,12 +30,12 @@ type client struct {
 	}
 }
 
-func New() *client {
+func New() *Client {
 	return NewWithAddress("")
 }
 
-func NewWithAddress(connectaddress string) *client {
-	client := &client{
+func NewWithAddress(connectaddress string) *Client {
+	client := &Client{
 		httpClient: resty.New().
 			OnBeforeRequest(defaultHeaders).
 			SetError(&requestError{}),
@@ -84,13 +84,13 @@ func NewWithAddress(connectaddress string) *client {
 	return client
 }
 
-func (c *client) Authenticate(orgId, apiKey, secretKey string) *client {
+func (c *Client) Authenticate(orgId, apiKey, secretKey string) *Client {
 	c.httpClient.OnBeforeRequest(authenticator(orgId, apiKey, secretKey))
 
 	return c
 }
 
-func (c *client) doRequest(method, path string, body interface{}, queryParameters map[string]string) ([]byte, error) {
+func (c *Client) doRequest(method, path string, body interface{}, queryParameters map[string]string) ([]byte, error) {
 	url := fmt.Sprintf("%s%s", ProdUrl, path)
 
 	response, err := c.httpClient.R().

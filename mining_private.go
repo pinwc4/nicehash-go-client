@@ -3,6 +3,7 @@ package nhclient
 import (
 	"encoding/json"
 	"fmt"
+
 	"github.com/pkg/errors"
 )
 
@@ -11,7 +12,7 @@ type optionalParameter struct {
 }
 
 type miningPrivate struct {
-	client *client
+	client *Client
 }
 
 // GetAddress get the mining address.

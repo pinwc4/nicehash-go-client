@@ -4,7 +4,7 @@ import "testing"
 
 func Test_general_GetMiningAlgorithms(t *testing.T) {
 	type fields struct {
-		client *client
+		client *Client
 	}
 	tests := []struct {
 		name   string

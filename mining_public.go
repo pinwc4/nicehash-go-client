@@ -1,7 +1,7 @@
 package nhclient
 
 type miningPublic struct {
-	client *client
+	client *Client
 }
 
 func (m *miningPublic) GetActiveWorkersByBTCAddress() error {

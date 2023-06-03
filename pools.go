@@ -1,5 +1,5 @@
 package nhclient
 
 type pools struct {
-	client *client
+	client *Client
 }

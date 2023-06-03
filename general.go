@@ -7,7 +7,7 @@ import (
 )
 
 type general struct {
-	client *client
+	client *Client
 }
 
 type miningAlgoList struct {

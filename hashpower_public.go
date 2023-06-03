@@ -7,7 +7,7 @@ import (
 )
 
 type hashpowerPublic struct {
-	client *client
+	client *Client
 }
 
 type orderBook struct {

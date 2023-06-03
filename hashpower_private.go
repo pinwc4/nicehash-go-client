@@ -8,7 +8,7 @@ import (
 )
 
 type hashpowerPrivate struct {
-	client *client
+	client *Client
 }
 
 type newOrderInfo struct {

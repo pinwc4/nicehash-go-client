@@ -1,7 +1,7 @@
 package nhclient
 
 type accounting struct {
-	client *client
+	client *Client
 }
 
 func (a *accounting) GetBalanceByCurrency() error {
