@@ -10,7 +10,7 @@ type hashpowerPublic struct {
 	client *Client
 }
 
-type orderBook struct {
+type OrderBook struct {
 	Stats *struct {
 		EU  *orderBookDetails
 		USA *orderBookDetails
@@ -33,6 +33,7 @@ type orderBookDetails struct {
 		AcceptedSpeed string
 		PayingSpeed   string
 		Alive         bool
+		myOrder       bool
 	}
 	//Pagination *struct {
 	//	size           int64
@@ -41,7 +42,7 @@ type orderBookDetails struct {
 	//}
 }
 
-func (h *hashpowerPublic) GetOrderBook(algo string) (orderBook *orderBook, err error) {
+func (h *hashpowerPublic) GetOrderBook(algo string) (orderBook *OrderBook, err error) {
 	path := "/main/api/v2/hashpower/orderBook"
 
 	queryParameters := make(map[string]string, 0)
