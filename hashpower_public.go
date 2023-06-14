@@ -33,7 +33,7 @@ type orderBookDetails struct {
 		AcceptedSpeed string
 		PayingSpeed   string
 		Alive         bool
-		myOrder       bool
+		MyOrder       bool
 	}
 	//Pagination *struct {
 	//	size           int64
