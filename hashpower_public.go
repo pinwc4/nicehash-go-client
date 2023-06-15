@@ -12,12 +12,12 @@ type hashpowerPublic struct {
 
 type OrderBook struct {
 	Stats *struct {
-		EU  *orderBookDetails
-		USA *orderBookDetails
+		EU  *OrderBookDetails
+		USA *OrderBookDetails
 	}
 }
 
-type orderBookDetails struct {
+type OrderBookDetails struct {
 	UpdatedTs  string
 	TotalSpeed string
 	//MarketFactor        string
