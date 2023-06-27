@@ -11,10 +11,10 @@ type general struct {
 }
 
 type miningAlgoList struct {
-	MiningAlgorithms []*miningAlgoInfo
+	MiningAlgorithms []*MiningAlgoInfo
 }
 
-type miningAlgoInfo struct {
+type MiningAlgoInfo struct {
 	Algorithm             string
 	Title                 string
 	Enabled               bool
@@ -36,8 +36,8 @@ type miningAlgoInfo struct {
 	PriceFactor           string `json:"priceFactor"`
 }
 
-func (g *general) GetMiningAlgorithms() (algomap map[string]*miningAlgoInfo, err error) {
-	algomap = make(map[string]*miningAlgoInfo)
+func (g *general) GetMiningAlgorithms() (algomap map[string]*MiningAlgoInfo, err error) {
+	algomap = make(map[string]*MiningAlgoInfo)
 	responseBody, err := g.client.doRequest(
 		"GET",
 		"/main/api/v2/mining/algorithms",

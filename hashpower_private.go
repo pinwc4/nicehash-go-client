@@ -34,7 +34,7 @@ type myOrders struct {
 	}
 }
 
-func (h *hashpowerPrivate) CreateOrder(algo *miningAlgoInfo, market string, poolid string, price float64, limit float64, btcamount float64) (orderInfo *newOrderInfo, err error) {
+func (h *hashpowerPrivate) CreateOrder(algo *MiningAlgoInfo, market string, poolid string, price float64, limit float64, btcamount float64) (orderInfo *newOrderInfo, err error) {
 	path := "/main/api/v2/hashpower/order"
 
 	requestbodymap := map[string]interface{}{
@@ -87,7 +87,7 @@ func (h *hashpowerPrivate) CancelOrder(orderid string) (err error) {
 	return nil
 }
 
-func (h *hashpowerPrivate) UpdateOrderPrice(orderid string, price float64, algo *miningAlgoInfo) (err error) {
+func (h *hashpowerPrivate) UpdateOrderPrice(orderid string, price float64, algo *MiningAlgoInfo) (err error) {
 	path := fmt.Sprintf("/main/api/v2/hashpower/order/%s/updatePriceAndLimit/", orderid)
 
 	requestbody := fmt.Sprintf(
@@ -111,7 +111,7 @@ func (h *hashpowerPrivate) UpdateOrderPrice(orderid string, price float64, algo 
 
 }
 
-func (h *hashpowerPrivate) UpdateOrderLimit(orderid string, limit float64, algo *miningAlgoInfo) (err error) {
+func (h *hashpowerPrivate) UpdateOrderLimit(orderid string, limit float64, algo *MiningAlgoInfo) (err error) {
 	path := fmt.Sprintf("/main/api/v2/hashpower/order/%s/updatePriceAndLimit/", orderid)
 
 	requestbody := fmt.Sprintf(
@@ -135,7 +135,7 @@ func (h *hashpowerPrivate) UpdateOrderLimit(orderid string, limit float64, algo 
 
 }
 
-func (h *hashpowerPrivate) UpdateOrderPriceAndLimit(orderid string, price float64, limit float64, algo *miningAlgoInfo) (err error) {
+func (h *hashpowerPrivate) UpdateOrderPriceAndLimit(orderid string, price float64, limit float64, algo *MiningAlgoInfo) (err error) {
 	path := fmt.Sprintf("/main/api/v2/hashpower/order/%s/updatePriceAndLimit/", orderid)
 
 	requestbody := fmt.Sprintf(
